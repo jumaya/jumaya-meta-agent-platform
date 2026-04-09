@@ -41,7 +41,7 @@ Collections:
 - `project_contexts` — Project configurations and decisions
 - `skill_cache` — Extracted skills with vector embeddings
 - `sessions` — Pipeline execution state
-- `source_whitelist` — Trusted domains for skill search
+- `whitelist` — Trusted domains for skill search
 - `audit_log` — Token usage and agent actions
 
 ## Data Flow

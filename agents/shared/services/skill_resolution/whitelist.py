@@ -4,7 +4,7 @@ from shared.config.whitelist_seed import DEFAULT_SOURCES
 
 
 class SourceWhitelistManager:
-    COLLECTION = "source_whitelist"
+    COLLECTION = "whitelist"
 
     async def get_active_domains(self) -> list[str]:
         db = await get_database()
