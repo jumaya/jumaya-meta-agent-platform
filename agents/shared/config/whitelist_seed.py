@@ -1,0 +1,98 @@
+DEFAULT_SOURCES: list[dict] = [
+    {
+        "domain": "learn.microsoft.com",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["dotnet", "azure", "csharp", "architecture"],
+    },
+    {
+        "domain": "martinfowler.com",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["architecture", "patterns", "ddd", "refactoring"],
+    },
+    {
+        "domain": "spring.io",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["java", "spring-boot", "microservices"],
+    },
+    {
+        "domain": "angular.dev",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["angular", "typescript", "frontend"],
+    },
+    {
+        "domain": "nextjs.org",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["nextjs", "react", "frontend"],
+    },
+    {
+        "domain": "docs.docker.com",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["docker", "containers", "devops"],
+    },
+    {
+        "domain": "kubernetes.io",
+        "priority": "CRITICAL",
+        "trust_score": 0.95,
+        "categories": ["kubernetes", "orchestration", "devops"],
+    },
+    {
+        "domain": "owasp.org",
+        "priority": "HIGH",
+        "trust_score": 0.90,
+        "categories": ["security", "owasp", "vulnerabilities"],
+    },
+    {
+        "domain": "cheatsheetseries.owasp.org",
+        "priority": "HIGH",
+        "trust_score": 0.90,
+        "categories": ["security", "owasp", "best-practices"],
+    },
+    {
+        "domain": "refactoring.guru",
+        "priority": "HIGH",
+        "trust_score": 0.90,
+        "categories": ["patterns", "refactoring", "design-patterns"],
+    },
+    {
+        "domain": "microservices.io",
+        "priority": "HIGH",
+        "trust_score": 0.90,
+        "categories": ["microservices", "patterns", "architecture"],
+    },
+    {
+        "domain": "12factor.net",
+        "priority": "HIGH",
+        "trust_score": 0.90,
+        "categories": ["cloud-native", "best-practices", "devops"],
+    },
+    {
+        "domain": "docs.github.com",
+        "priority": "MEDIUM",
+        "trust_score": 0.85,
+        "categories": ["github-actions", "ci-cd", "devops"],
+    },
+    {
+        "domain": "baeldung.com",
+        "priority": "MEDIUM",
+        "trust_score": 0.85,
+        "categories": ["java", "spring-boot", "testing"],
+    },
+    {
+        "domain": "andrewlock.net",
+        "priority": "MEDIUM",
+        "trust_score": 0.85,
+        "categories": ["dotnet", "aspnet", "best-practices"],
+    },
+    {
+        "domain": "jimmybogard.com",
+        "priority": "MEDIUM",
+        "trust_score": 0.85,
+        "categories": ["dotnet", "mediatr", "architecture"],
+    },
+]
