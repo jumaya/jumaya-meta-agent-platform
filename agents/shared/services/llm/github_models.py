@@ -39,4 +39,7 @@ class GitHubModelsClient:
             response.raise_for_status()
 
         data = response.json()
-        return data["choices"][0]["message"]["content"] or ""
+        choices = data.get("choices") or []
+        if not choices:
+            return ""
+        return choices[0].get("message", {}).get("content") or ""
