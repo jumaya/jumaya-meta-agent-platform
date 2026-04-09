@@ -26,7 +26,13 @@ class GitHubModelsClient:
             "temperature": temperature,
         }
         async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(self.BASE_URL, headers=headers, json=payload)
-            response.raise_for_status()
+            try:
+                response = await client.post(self.BASE_URL, headers=headers, json=payload)
+                response.raise_for_status()
+            except httpx.HTTPStatusError as exc:
+                raise RuntimeError(
+                    f"GitHub Models API request failed [{exc.response.status_code}]: "
+                    f"{exc.response.text}"
+                ) from exc
         data = response.json()
         return data["choices"][0]["message"]["content"]
