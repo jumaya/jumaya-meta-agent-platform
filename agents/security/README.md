@@ -11,6 +11,6 @@ Reviews code for OWASP vulnerabilities and security best practices.
 ## Environment Variables
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `SECURITY_MODEL` | `anthropic/claude-sonnet-4-20250514` | LLM model to use |
+| `GITHUB_TOKEN` | - | GitHub Personal Access Token |
+| `MODEL` | `claude-sonnet-4.6` | LLM model to use via GitHub Models API |
 | `MONGODB_URI` | - | MongoDB connection string |
-| `ANTHROPIC_API_KEY` | - | Anthropic API key |

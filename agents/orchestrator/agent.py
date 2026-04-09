@@ -2,6 +2,12 @@ import os
 
 from google.adk.agents import Agent
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
+from google.adk.models.lite_llm import LiteLlm
+
+from shared.config.settings import settings
+
+os.environ["OPENAI_API_KEY"] = settings.github_token
+os.environ["OPENAI_API_BASE"] = "https://models.github.ai/inference"
 
 architect = RemoteA2aAgent(
     name="architect",
@@ -42,7 +48,7 @@ security = RemoteA2aAgent(
 )
 
 root_agent = Agent(
-    model="gemini-2.5-flash",
+    model=LiteLlm(model=f"openai/{settings.model}"),
     name="meta_agent",
     instruction="""You are Meta Agent, an AI-powered software engineering consultant.
     You help developers create, build, test, deploy, and secure software projects.
@@ -55,12 +61,6 @@ root_agent = Agent(
     - "How much would it cost to host..." → delegate to cloud_analyzer
     - "Review security..." → delegate to security
     - "Design the architecture..." → delegate to architect
-
-    On first interaction with a new project, ask the user which model preset they prefer:
-    - budget (all Gemini Flash, ~$0.01/pipeline)
-    - auto (optimized mix, ~$0.04/pipeline)
-    - premium (best models, ~$0.08/pipeline)
-    - custom (let user choose per agent)
 
     Always respond in the user's language. System processing is in English for token efficiency.
     Keep responses concise and actionable.

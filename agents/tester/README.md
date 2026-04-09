@@ -11,6 +11,6 @@ Generates comprehensive test suites adapted to any test framework.
 ## Environment Variables
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `TESTER_MODEL` | `openai/gpt-4o-mini` | LLM model to use |
+| `GITHUB_TOKEN` | - | GitHub Personal Access Token |
+| `MODEL` | `claude-sonnet-4.6` | LLM model to use via GitHub Models API |
 | `MONGODB_URI` | - | MongoDB connection string |
-| `OPENAI_API_KEY` | - | OpenAI API key |

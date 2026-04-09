@@ -50,7 +50,7 @@
 
 **Rationale**: Always up-to-date best practices. No manual skill maintenance.
 
-**Consequences**: Requires Bing Search API key. Cache miss adds ~2s latency.
+**Consequences**: Cache miss adds ~2s latency.
 
 ---
 
@@ -60,3 +60,21 @@
 **Rationale**: Simplifies user experience. Users interact with one intelligent assistant, not a panel of specialists.
 
 **Consequences**: Meta Agent must intelligently route all requests.
+
+---
+
+## ADR-013: LLM Provider — GitHub Models API
+**Decision**: Use GitHub Models API (`https://models.github.ai/inference`) authenticated with a GitHub Personal Access Token instead of individual OpenAI/Anthropic/Google API keys.
+
+**Rationale**: Users with a GitHub Copilot subscription get access to all major models (Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, Gemini 2.5 Pro, GPT-4o, etc.) through a single GitHub PAT. This eliminates the need to manage multiple API keys and provider accounts. A single `MODEL` env var controls which model all agents use.
+
+**Consequences**: Requires a GitHub Copilot subscription. All LLM traffic routes through GitHub Models API endpoint. Model selection is uniform — all agents use the same configured model.
+
+---
+
+## ADR-014: Search Provider — DuckDuckGo
+**Decision**: Replace Bing Search with DuckDuckGo (`duckduckgo-search` Python package) for the Skill Resolution Engine.
+
+**Rationale**: DuckDuckGo requires no API key, no registration, and costs $0. This removes a mandatory dependency and simplifies setup for new contributors.
+
+**Consequences**: No account or billing setup required. Search quality is comparable for technical queries. Results may differ slightly from Bing.

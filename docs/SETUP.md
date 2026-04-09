@@ -6,11 +6,7 @@
 - **.NET 9 SDK**
 - **Docker + Docker Compose**
 - **kubectl** (for K8s deployment)
-- **API Keys**:
-  - `GOOGLE_API_KEY` — Google AI Studio
-  - `OPENAI_API_KEY` — OpenAI Platform
-  - `ANTHROPIC_API_KEY` — Anthropic Console
-  - `BING_SEARCH_KEY` — Azure Cognitive Services (Bing Search v7)
+- **GitHub Copilot subscription** — provides access to all LLM models via GitHub Models API
 
 ## Local Development
 
@@ -19,7 +15,7 @@
 git clone https://github.com/jumaya/jumaya-meta-agent-platform.git
 cd jumaya-meta-agent-platform
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your GitHub Personal Access Token
 ```
 
 ### 2. Start services
@@ -70,11 +66,8 @@ make deploy-prod
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `GOOGLE_API_KEY` | Yes | Google Gemini API key |
-| `OPENAI_API_KEY` | Yes | OpenAI API key |
-| `ANTHROPIC_API_KEY` | Yes | Anthropic API key |
-| `BING_SEARCH_KEY` | Yes | Bing Search v7 API key |
+| `GITHUB_TOKEN` | Yes | GitHub Personal Access Token (Copilot subscription) |
+| `MODEL` | No | Model name, e.g. `claude-sonnet-4.6` (default) |
 | `MONGODB_URI` | Yes | MongoDB connection string |
-| `DEFAULT_MODEL_PRESET` | No | `auto` (default), `budget`, or `premium` |
 | `SKILL_CACHE_TTL_DAYS` | No | `30` (default) |
 | `LOG_LEVEL` | No | `INFO` (default) |

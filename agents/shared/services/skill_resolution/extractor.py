@@ -1,6 +1,5 @@
-import litellm
-
 from shared.config.settings import settings
+from shared.services.llm.github_models import GitHubModelsClient
 
 
 class SkillExtractor:
@@ -11,8 +10,8 @@ class SkillExtractor:
         "Be concise. Output structured markdown. Max 2000 tokens."
     )
 
-    def __init__(self, model: str = "openai/gpt-4o-mini") -> None:
-        self._model = model
+    def __init__(self) -> None:
+        self._client = GitHubModelsClient()
 
     async def extract(self, content: str, query: str, max_tokens: int = 2000) -> str:
         truncated = content[: settings.skill_max_tokens * 4]
@@ -29,10 +28,4 @@ class SkillExtractor:
             },
         ]
 
-        response = await litellm.acompletion(
-            model=self._model,
-            messages=messages,
-            max_tokens=max_tokens,
-            temperature=0.1,
-        )
-        return response.choices[0].message.content or ""
+        return await self._client.complete(messages=messages, max_tokens=max_tokens)
