@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "meta-agent-orchestrator"
+version = "0.1.0"
+description = "Orchestrator agent for Meta AI Agent Platform"
+requires-python = ">=3.12"
+dependencies = [
+    "google-adk[a2a]>=0.5.0",
+    "meta-agent-shared",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

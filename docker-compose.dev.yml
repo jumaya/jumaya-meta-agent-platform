@@ -1,0 +1,160 @@
+name: meta-agent-dev
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: meta-agent-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: devpassword
+      MONGO_INITDB_DATABASE: meta_agent
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  orchestrator:
+    build:
+      context: agents/orchestrator
+      dockerfile: Dockerfile
+    container_name: meta-agent-orchestrator
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ARCHITECT_AGENT_CARD=http://architect:8001/.well-known/agent.json
+      - SCAFFOLDER_AGENT_CARD=http://scaffolder:8002/.well-known/agent.json
+      - CODER_AGENT_CARD=http://coder:8003/.well-known/agent.json
+      - TESTER_AGENT_CARD=http://tester:8004/.well-known/agent.json
+      - DEVOPS_AGENT_CARD=http://devops:8005/.well-known/agent.json
+      - CLOUD_ANALYZER_AGENT_CARD=http://cloud-analyzer:8006/.well-known/agent.json
+      - SECURITY_AGENT_CARD=http://security:8007/.well-known/agent.json
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  architect:
+    build:
+      context: agents/architect
+      dockerfile: Dockerfile
+    container_name: meta-agent-architect
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - BING_SEARCH_KEY=${BING_SEARCH_KEY}
+      - PORT=8001
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  coder:
+    build:
+      context: agents/coder
+      dockerfile: Dockerfile
+    container_name: meta-agent-coder
+    ports:
+      - "8003:8003"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BING_SEARCH_KEY=${BING_SEARCH_KEY}
+      - PORT=8003
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  tester:
+    build:
+      context: agents/tester
+      dockerfile: Dockerfile
+    container_name: meta-agent-tester
+    ports:
+      - "8004:8004"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BING_SEARCH_KEY=${BING_SEARCH_KEY}
+      - PORT=8004
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  devops:
+    build:
+      context: agents/devops
+      dockerfile: Dockerfile
+    container_name: meta-agent-devops
+    ports:
+      - "8005:8005"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BING_SEARCH_KEY=${BING_SEARCH_KEY}
+      - PORT=8005
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  security:
+    build:
+      context: agents/security
+      dockerfile: Dockerfile
+    container_name: meta-agent-security
+    ports:
+      - "8007:8007"
+    environment:
+      - MONGODB_URI=mongodb://admin:devpassword@mongodb:27017/meta_agent?authSource=admin
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - BING_SEARCH_KEY=${BING_SEARCH_KEY}
+      - PORT=8007
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  scaffolder:
+    build:
+      context: services/MetaAgent.Scaffolder
+      dockerfile: Dockerfile
+    container_name: meta-agent-scaffolder
+    ports:
+      - "8002:8002"
+    environment:
+      - ASPNETCORE_URLS=http://+:8002
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: unless-stopped
+
+  cloud-analyzer:
+    build:
+      context: services/MetaAgent.CloudAnalyzer
+      dockerfile: Dockerfile
+    container_name: meta-agent-cloud-analyzer
+    ports:
+      - "8006:8006"
+    environment:
+      - ASPNETCORE_URLS=http://+:8006
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Azure__SubscriptionId=${AZURE_SUBSCRIPTION_ID:-}
+      - Aws__AccessKeyId=${AWS_ACCESS_KEY_ID:-}
+      - Aws__SecretAccessKey=${AWS_SECRET_ACCESS_KEY:-}
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
