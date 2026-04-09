@@ -15,13 +15,13 @@ Meta AI Agent Platform v3 is a multi-agent system where specialized AI agents co
 ### Specialized Agents (Python)
 Each agent is an independent Python service exposing an A2A endpoint:
 
-| Agent | Port | Primary Model | Responsibility |
-|-------|------|--------------|----------------|
-| Architect | 8001 | claude-sonnet-4 | Architecture design via lean interview |
-| Coder | 8003 | claude-sonnet-4 | Production-ready code generation |
-| Tester | 8004 | gpt-4o-mini | Test suite generation |
-| DevOps | 8005 | gpt-4o-mini | CI/CD and infrastructure as code |
-| Security | 8007 | claude-sonnet-4 | OWASP security reviews |
+| Agent | Port | Model | Responsibility |
+|-------|------|-------|----------------|
+| Architect | 8001 | `settings.model` | Architecture design via lean interview |
+| Coder | 8003 | `settings.model` | Production-ready code generation |
+| Tester | 8004 | `settings.model` | Test suite generation |
+| DevOps | 8005 | `settings.model` | CI/CD and infrastructure as code |
+| Security | 8007 | `settings.model` | OWASP security reviews |
 
 ### .NET Services
 | Service | Port | Responsibility |
@@ -32,8 +32,8 @@ Each agent is an independent Python service exposing an A2A endpoint:
 ### Skill Resolution Engine
 Dynamic skill acquisition from trusted web sources:
 1. Check MongoDB vector cache (TTL: 30 days)
-2. Bing Search with domain whitelist
-3. Fetch + extract with GPT-4o-mini
+2. DuckDuckGo search with domain whitelist (no API key required)
+3. Fetch + extract with GitHub Models API
 4. Cache embeddings for future similarity searches
 
 ### Persistence (MongoDB Atlas)
