@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meta-agent-config
+data:
+  DEFAULT_MODEL_PRESET: "auto"
+  SKILL_CACHE_TTL_DAYS: "30"
+  SKILL_MAX_TOKENS: "2000"
+  LOG_LEVEL: "INFO"
+  MONGODB_DATABASE: "meta_agent"
+  ARCHITECT_AGENT_CARD: "http://architect-svc:8001/.well-known/agent.json"
+  SCAFFOLDER_AGENT_CARD: "http://scaffolder-svc:8002/.well-known/agent.json"
+  CODER_AGENT_CARD: "http://coder-svc:8003/.well-known/agent.json"
+  TESTER_AGENT_CARD: "http://tester-svc:8004/.well-known/agent.json"
+  DEVOPS_AGENT_CARD: "http://devops-svc:8005/.well-known/agent.json"
+  CLOUD_ANALYZER_AGENT_CARD: "http://cloud-analyzer-svc:8006/.well-known/agent.json"
+  SECURITY_AGENT_CARD: "http://security-svc:8007/.well-known/agent.json"

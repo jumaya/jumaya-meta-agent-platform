@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-analyzer
+  template:
+    metadata:
+      labels:
+        app: cloud-analyzer
+    spec:
+      containers:
+        - name: cloud-analyzer
+          image: meta-agent-cloud-analyzer:latest
+          ports:
+            - containerPort: 8006
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:8006"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8006
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8006
+            initialDelaySeconds: 5
+            periodSeconds: 10

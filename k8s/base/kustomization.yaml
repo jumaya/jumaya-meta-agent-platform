@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: meta-agent
+
+resources:
+  - namespace.yaml
+  - config/configmap.yaml
+  - config/secrets.yaml
+  - data/mongodb-pvc.yaml
+  - data/mongodb-statefulset.yaml
+  - data/mongodb-service.yaml
+  - agents/orchestrator-deployment.yaml
+  - agents/orchestrator-service.yaml
+  - agents/architect-deployment.yaml
+  - agents/architect-service.yaml
+  - agents/coder-deployment.yaml
+  - agents/coder-service.yaml
+  - agents/tester-deployment.yaml
+  - agents/tester-service.yaml
+  - agents/devops-deployment.yaml
+  - agents/devops-service.yaml
+  - agents/security-deployment.yaml
+  - agents/security-service.yaml
+  - services/scaffolder-deployment.yaml
+  - services/scaffolder-service.yaml
+  - services/cloud-analyzer-deployment.yaml
+  - services/cloud-analyzer-service.yaml
+  - ingress/ingress.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: meta-agent-platform
+  app.kubernetes.io/managed-by: kustomize

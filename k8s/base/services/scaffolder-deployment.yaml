@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scaffolder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scaffolder
+  template:
+    metadata:
+      labels:
+        app: scaffolder
+    spec:
+      containers:
+        - name: scaffolder
+          image: meta-agent-scaffolder:latest
+          ports:
+            - containerPort: 8002
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:8002"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8002
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8002
+            initialDelaySeconds: 5
+            periodSeconds: 10
