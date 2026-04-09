@@ -1,41 +1,30 @@
 import httpx
+from duckduckgo_search import AsyncDDGS
 
-from shared.config.settings import settings
 from shared.services.skill_resolution.whitelist import SourceWhitelistManager
 
 
-class BingSearchProvider:
+class DuckDuckGoSearchProvider:
     def __init__(self) -> None:
         self._whitelist = SourceWhitelistManager()
 
     async def search(self, query: str, stack_tags: list[str], max_results: int = 5) -> list[dict]:
-        domains = await self._whitelist.get_active_domains()
-        if not domains:
-            return []
-
-        site_filter = " OR ".join(f"site:{d}" for d in domains[:10])
         tag_str = " ".join(stack_tags[:3]) if stack_tags else ""
-        full_query = f"{query} {tag_str} ({site_filter})".strip()
+        domains = await self._whitelist.get_active_domains()
+        site_filter = " OR ".join(f"site:{d}" for d in domains[:10]) if domains else ""
+        if site_filter:
+            full_query = f"{query} {tag_str} ({site_filter})".strip()
+        else:
+            full_query = f"{query} {tag_str}".strip()
 
-        headers = {"Ocp-Apim-Subscription-Key": settings.bing_search_key}
-        params = {"q": full_query, "count": max_results, "mkt": "en-US"}
-
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            response = await client.get(
-                settings.bing_search_endpoint, headers=headers, params=params
-            )
-            response.raise_for_status()
-
-        data = response.json()
         results = []
-        for item in data.get("webPages", {}).get("value", []):
-            results.append(
-                {
-                    "url": item.get("url", ""),
-                    "title": item.get("name", ""),
-                    "snippet": item.get("snippet", ""),
-                }
-            )
+        async with AsyncDDGS() as ddgs:
+            async for r in ddgs.text(full_query, max_results=max_results):
+                results.append({
+                    "url": r.get("href", ""),
+                    "title": r.get("title", ""),
+                    "snippet": r.get("body", ""),
+                })
         return results
 
     async def fetch_content(self, url: str) -> str:

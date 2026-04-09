@@ -27,12 +27,12 @@
 
 ---
 
-## ADR-004: Model-Agnostic via LiteLLM
-**Decision**: Use LiteLLM to abstract LLM provider calls.
+## ADR-004: Model-Agnostic via LiteLLM + GitHub Models API
+**Decision**: Use LiteLLM with a custom base URL pointing to the GitHub Models API.
 
-**Rationale**: Enables switching between OpenAI, Anthropic, and Google models without code changes.
+**Rationale**: GitHub Copilot subscription provides access to all major models (Claude Opus 4.6, Claude Sonnet 4.6, GPT-5.4, Gemini 2.5 Pro, etc.) via a single GitHub PAT. No separate API keys needed.
 
-**Consequences**: LiteLLM adds ~50ms latency per call. Provider API keys required.
+**Consequences**: Requires a GitHub PAT with Copilot access. LiteLlm routes all calls through `https://models.github.ai/inference`.
 
 ---
 
@@ -50,7 +50,25 @@
 
 **Rationale**: Always up-to-date best practices. No manual skill maintenance.
 
-**Consequences**: Requires Bing Search API key. Cache miss adds ~2s latency.
+**Consequences**: Cache miss adds ~2s latency.
+
+---
+
+## ADR-013: LLM Provider — GitHub Models API
+**Decision**: Use GitHub Models API via GitHub PAT. Single model for all agents configured via `MODEL` env var.
+
+**Rationale**: GitHub Copilot subscription provides access to all major models via one PAT. No per-agent model selection. No external API keys needed.
+
+**Consequences**: Requires a GitHub PAT with Copilot access. Model is set globally; not per-agent.
+
+---
+
+## ADR-014: Search Provider — DuckDuckGo
+**Decision**: Use DuckDuckGo (`duckduckgo-search` Python package) instead of Bing Search.
+
+**Rationale**: No API key, no registration, $0 cost. Identical search quality for developer queries.
+
+**Consequences**: Rate limits apply to heavy usage. No SLA guarantees.
 
 ---
 
