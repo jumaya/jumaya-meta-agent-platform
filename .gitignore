@@ -218,3 +218,4 @@ terraform.rc
 !.env.example
 *.local
 .env.example
+.env.example
