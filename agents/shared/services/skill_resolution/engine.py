@@ -1,14 +1,14 @@
 from shared.services.skill_resolution.cache import SkillCacheManager
 from shared.services.skill_resolution.extractor import SkillExtractor
-from shared.services.skill_resolution.web_search import BingSearchProvider
+from shared.services.skill_resolution.web_search import DuckDuckGoSearchProvider
 from shared.services.persistence.models import SkillCache
 
 
 class SkillResolutionEngine:
-    def __init__(self, extractor_model: str = "openai/gpt-4o-mini") -> None:
+    def __init__(self) -> None:
         self._cache = SkillCacheManager()
-        self._search = BingSearchProvider()
-        self._extractor = SkillExtractor(model=extractor_model)
+        self._search = DuckDuckGoSearchProvider()
+        self._extractor = SkillExtractor()
 
     async def resolve(self, query: str, stack_tags: list[str]) -> str:
         cached = await self._cache.lookup(query, stack_tags)

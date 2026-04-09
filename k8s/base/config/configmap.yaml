@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: meta-agent-config
 data:
-  DEFAULT_MODEL_PRESET: "auto"
+  MODEL: "gpt-4o"
   SKILL_CACHE_TTL_DAYS: "30"
   SKILL_MAX_TOKENS: "2000"
   LOG_LEVEL: "INFO"

@@ -29,15 +29,6 @@ Simply describe what you need. Examples:
 - "Add unit tests for the UserService"
 - "Design the architecture for a multi-tenant SaaS app"
 
-## Model Selection
-On your first request, ask the user which AI model preset they prefer:
-- **Budget**: Fast and economical (~$0.01/task) — all Gemini Flash
-- **Auto**: Optimized quality/cost balance (~$0.04/task) — recommended
-- **Premium**: Maximum quality (~$0.08/task) — best models everywhere
-- **Custom**: Let the user choose per agent
-
-You can change models anytime: "Switch to premium for this task"
-
 ## Important Notes
 - Only ONE agent appears in VS Code: **Meta Agent** (this one)
 - All specialized agents work invisibly via A2A protocol

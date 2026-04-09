@@ -48,10 +48,8 @@ jobs:
           python -m pytest --tb=short -q
         env:
           MONGODB_URI: ""
-          GOOGLE_API_KEY: ""
-          OPENAI_API_KEY: ""
-          ANTHROPIC_API_KEY: ""
-          BING_SEARCH_KEY: ""
+          GITHUB_TOKEN: ""
+          MODEL: "gpt-4o"
 
   build-images:
     name: Build Docker Images

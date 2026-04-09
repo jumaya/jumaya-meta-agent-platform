@@ -1,8 +1,7 @@
-import os
-
 from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
 
+from shared.config.settings import settings
 from shared.tools.audit_logger import log_audit
 from shared.tools.file_generator import generate_files
 from shared.tools.project_context import get_context
@@ -10,10 +9,8 @@ from shared.tools.skill_search import search_skill
 
 from .instructions import build_instruction
 
-DEFAULT_MODEL = os.getenv("CODER_MODEL", "anthropic/claude-sonnet-4-20250514")
-
 root_agent = Agent(
-    model=LiteLlm(model=DEFAULT_MODEL),
+    model=LiteLlm(model=f"openai/{settings.model}"),
     name="coder_agent",
     description="Generates production-ready code for any language and framework",
     instruction=build_instruction,

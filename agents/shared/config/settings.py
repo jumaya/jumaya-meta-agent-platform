@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -8,20 +10,21 @@ class Settings(BaseSettings):
     mongodb_uri: str = "mongodb://localhost:27017"
     mongodb_database: str = "meta_agent"
 
-    # API Keys
-    google_api_key: str = ""
-    openai_api_key: str = ""
-    anthropic_api_key: str = ""
-    bing_search_key: str = ""
+    # GitHub Models API
+    github_token: str = ""
+    model: str = "gpt-4o"
 
     # Skill Resolution
     skill_cache_ttl_days: int = 30
     skill_max_tokens: int = 2000
-    bing_search_endpoint: str = "https://api.bing.microsoft.com/v7.0/search"
 
-    # Agent defaults
-    default_model_preset: str = "auto"
+    # Misc
     log_level: str = "INFO"
 
 
 settings = Settings()
+
+# Configure LiteLLM to use GitHub Models API (OpenAI-compatible endpoint)
+if settings.github_token:
+    os.environ.setdefault("OPENAI_API_KEY", settings.github_token)
+    os.environ.setdefault("OPENAI_API_BASE", "https://models.github.ai/inference")

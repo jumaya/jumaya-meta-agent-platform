@@ -50,7 +50,7 @@
 
 **Rationale**: Always up-to-date best practices. No manual skill maintenance.
 
-**Consequences**: Requires Bing Search API key. Cache miss adds ~2s latency.
+**Consequences**: Cache miss adds ~2s latency.
 
 ---
 
@@ -60,3 +60,21 @@
 **Rationale**: Simplifies user experience. Users interact with one intelligent assistant, not a panel of specialists.
 
 **Consequences**: Meta Agent must intelligently route all requests.
+
+---
+
+## ADR-013: GitHub Models API as LLM Provider
+**Decision**: Use GitHub Models API (authenticated with GitHub PAT) instead of direct OpenAI/Anthropic/Google API keys.
+
+**Rationale**: Users with a GitHub Copilot subscription have access to top-tier models (GPT-4o, Claude Sonnet, Gemini Pro, etc.) via the GitHub Models API without needing separate provider accounts. The API is OpenAI-compatible, so LiteLLM works with minimal configuration by setting `OPENAI_API_BASE=https://models.github.ai/inference`.
+
+**Consequences**: Requires a GitHub PAT with Copilot access. All agents use one single model configured via the `MODEL` env var.
+
+---
+
+## ADR-014: DuckDuckGo for Skill Search (No API Key Required)
+**Decision**: Replace Bing Search with DuckDuckGo (`duckduckgo-search` package).
+
+**Rationale**: DuckDuckGo search requires no API key, no Azure account, and no billing setup. The `duckduckgo-search` package provides an async interface (`AsyncDDGS`) that is drop-in compatible with the existing skill resolution engine.
+
+**Consequences**: No Bing Search API key needed. Search results may differ slightly from Bing but remain high quality for technical queries.

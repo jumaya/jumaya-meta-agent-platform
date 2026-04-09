@@ -54,12 +54,6 @@ class ProjectSecurity(BaseModel):
     multi_tenant: bool = False
 
 
-class ModelAssignments(BaseModel):
-    strategy: str = "auto"
-    assignments: dict[str, str] = Field(default_factory=dict)
-    change_history: list[dict] = Field(default_factory=list)
-
-
 class ProjectContext(BaseModel):
     name: str
     description: str = ""
@@ -68,7 +62,6 @@ class ProjectContext(BaseModel):
     architecture: ProjectArchitecture = Field(default_factory=ProjectArchitecture)
     security: ProjectSecurity = Field(default_factory=ProjectSecurity)
     decisions: list[dict] = Field(default_factory=list)
-    models: ModelAssignments = Field(default_factory=ModelAssignments)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
