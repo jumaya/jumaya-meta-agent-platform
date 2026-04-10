@@ -1,5 +1,5 @@
 import httpx
-from duckduckgo_search import AsyncDDGS
+from ddgs import DDGS
 
 from shared.services.skill_resolution.whitelist import SourceWhitelistManager
 
@@ -18,13 +18,13 @@ class DuckDuckGoSearchProvider:
             full_query = f"{query} {tag_str}".strip()
 
         results = []
-        async with AsyncDDGS() as ddgs:
-            async for r in ddgs.text(full_query, max_results=max_results):
-                results.append({
-                    "url": r.get("href", ""),
-                    "title": r.get("title", ""),
-                    "snippet": r.get("body", ""),
-                })
+        ddgs = DDGS()
+        for r in ddgs.text(full_query, max_results=max_results):
+            results.append({
+                "url": r.get("href", ""),
+                "title": r.get("title", ""),
+                "snippet": r.get("body", ""),
+            })
         return results
 
     async def fetch_content(self, url: str) -> str:
