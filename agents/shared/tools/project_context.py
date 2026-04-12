@@ -7,23 +7,34 @@ async def get_context(project_id: str) -> dict:
     """Retrieve the full project context from MongoDB.
 
     Args:
-        project_id: The MongoDB ObjectId string of the project.
+        project_id: The MongoDB ObjectId string or project name.
 
     Returns:
-        Project context as a dictionary, or empty dict if not found.
+        Project context as a dictionary, or a message if not found.
     """
     ctx = await _service.get(project_id)
-    return ctx.model_dump() if ctx else {}
+    if ctx:
+        return ctx.model_dump()
+    return {"message": f"No project found with id/name '{project_id}'. Use save_context to create one."}
 
 
-async def save_context(project_id: str, data: dict) -> bool:
-    """Update project context fields in MongoDB.
+async def save_context(project_id: str, data: dict) -> str:
+    """Create or update project context in MongoDB.
 
     Args:
-        project_id: The MongoDB ObjectId string of the project.
-        data: Dictionary of fields to update.
+        project_id: The project name or MongoDB ObjectId.
+        data: Dictionary of fields to save.
 
     Returns:
-        True if the update was successful.
+        Confirmation message.
     """
-    return await _service.update(project_id, data)
+    # Intentar actualizar primero
+    updated = await _service.update(project_id, data)
+    if updated:
+        return f"Project '{project_id}' updated successfully."
+
+    # Si no existe, crear nuevo
+    from shared.services.persistence.models import ProjectContext
+    new_context = ProjectContext(name=project_id, **{k: v for k, v in data.items() if k != "name"})
+    new_id = await _service.create(new_context)
+    return f"Project '{project_id}' created with id: {new_id}"
